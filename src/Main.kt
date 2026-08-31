@@ -122,3 +122,14 @@ fun main() {
         }
     }
 }
+fun printMenu() {
+    println("----------------------------------------")
+    println("MAIN MENU")
+    println("----------------------------------------")
+    println("1. Report a new infrastructure fault")
+    println("2. View all reports")
+    println("3. View reports by status")
+    println("4. Update a report's status (Admin)")
+    println("5. Exit")
+    println("----------------------------------------")
+}
