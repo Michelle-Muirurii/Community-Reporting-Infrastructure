@@ -102,7 +102,23 @@ fun main() {
     println("Months since first reported: ${monthsSinceReported}")
     println("=".repeat(40))
 
+    printHeader("COMMUNITY-REPORTING-INFRASTRUCTURE")
+    println("Welcome! Report Infrastructre Faults and Track their Status.\n")
 
-
-
+    var running = true
+    while (running) {
+        printMenu()
+        print("> ")
+        when (readLine()?.trim()) {
+            "1" -> submitReport()
+            "2" -> viewAllReports()
+            "3" -> viewReportsByStatus()
+            "4" -> updateReportStatus()
+            "5" -> {
+                println("\nGoodbye!")
+                running = false
+            }
+            else -> println("\nInvalid Option. Please Choose 1-5.\n")
+        }
+    }
 }
