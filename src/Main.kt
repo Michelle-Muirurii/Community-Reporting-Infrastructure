@@ -1,7 +1,8 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
-// Concept Note:
+// Concept Note:https://docs.google.com/document/d/1SltAn1g8NbZDkaD7HiqKc_ehyUfXkjv0by-qkkCwXc4/edit?usp=sharing
+// GitHub-View our collaboration : https://github.com/Michelle-Muirurii/Community-Reporting-Infrastructure.git
 // Group 3-[Michelle Muiruri-174904,
 //          Angel Muthoni-189733,
 //          Fareed Kamau-193339,
@@ -9,8 +10,23 @@
 //          Muli Junior-184070,
 //          Tichina Naitore-188142]
 
+data class Report (
+    val id: Int,
+    val faultType: String,
+    val location: String,
+    val severityCode: Char,
+    var isResolved: Boolean
+)
+
+const val APP_NAME ="Community Infrastructure Reporting"
+val VALID_FAULT_TYPES = listOf("Pothole","Broken Streetlight","Blocked Drainage")
+val VALID_STATUSES = listOf("Pending","In Progress","Resolved")
+
+val reports = mutableListOf<Report>()
+var nextId = 1
+
+
 fun main() {
-    val appName = "Community Infrastructure Reporting Management"
     val reportId: Int = 1001
     val faultType: String = "Pothole"
     val reportedByAdmin: Boolean = false
@@ -23,7 +39,7 @@ fun main() {
     val location = "Kayole, Nairobi"
     val monthsSinceReported = 2
 
-    status = "In progess"
+    status = "In progress"
 
 // : DATA TYPES(Muli)
     val reporterName: String = "Njeri Michelle"
@@ -33,54 +49,8 @@ fun main() {
     val isEmergency: Boolean = true
     val priorityCode: Char = 'H'
 
-    fun SubmitReport() {
-        printHeader("REPORT A NEW FAULT")
-
-        println("select the type of fault")
-        for (i in VALID_FAULT_TYPES.indices ){
-            println("${i + 1}. ${VALID_FAULT_TYPES[i]}")
-        }
-        print("> ")
-        val typechoice = readLine()?.toIntOrNull()
-        val faultType = if (typechoice = null && typeChoice in 1..VALID_FAULT_TYPES.size){
-            VALID_FAULT_TYPES[typeChoice - 1]
-        } else {
-            "Other"
-        }
-        println("\nEnter the location of the fault:")
-        print(">")
-        val Location = readLine()?.trim().orEmpty().ifEmpty { "Unspecified location"}
-        println("\nBriefly describe the fault:")
-        print("> ")
-        val description = readLine()?.trim().orEmpty().ifEmpty { "No description provided"}
-
-        val newReport = Report(
-            id = nextId,
-            faultType = faultType,
-            location = Location,
-            severitycode = 'M',
-            isResolved = false,
-        )
-        reports.add(newReport)
-        nextId++
-        println("\nReport submitted successfully. ID: ${newReport.id}")
-    }
-    fun printHeader(title: String) {
-        println("=".repeat (40))
-        println(title)
-        println("=".repeat (n=40))
-
-    }
-    fun printReport(report: Report){
-        println("---------------------")
-        println("Report ID: ${report.id}")
-        println("Fault Type: ${report.faultType}")
-        println("location: ${report.location}")
-        println("status: ${if (report.isResolved) "Resolved" else "Not Resolved"}")
-        println("------------------------")
-    }
     println("=".repeat(40))
-    println(appName)
+    println(APP_NAME)
     println("=".repeat(40) )
     println()
     println("Report ID: $reportId")
@@ -96,14 +66,14 @@ fun main() {
     println("Emergency Report: $isEmergency")
     println("Priority Code: $priorityCode")
     println()
-
     println("Total reports logged today: ${totalReportsToday}")
     println("AverageResponse time: ${averageResponseHours} hours")
     println("Months since first reported: ${monthsSinceReported}")
     println("=".repeat(40))
 
     printHeader("COMMUNITY-REPORTING-INFRASTRUCTURE")
-    println("Welcome! Report Infrastructre Faults and Track their Status.\n")
+    println("Welcome! Report Infrastructure Faults and Track their Status.\n")
+
 
     var running = true
     while (running) {
@@ -122,6 +92,58 @@ fun main() {
         }
     }
 }
+
+
+fun submitReport() {
+    printHeader("REPORT A NEW FAULT")
+
+    println("select the type of fault")
+    for (i in VALID_FAULT_TYPES.indices ){
+        println("${i + 1}. ${VALID_FAULT_TYPES[i]}")
+    }
+    print("> ")
+    val typechoice = readLine()?.toIntOrNull()
+    val faultType = if (typechoice != null && typechoice in 1..VALID_FAULT_TYPES.size){
+        VALID_FAULT_TYPES[typechoice - 1]
+    } else {
+        "Other"
+    }
+    println("\nEnter the location of the fault:")
+    print(">")
+    val Location = readLine()?.trim().orEmpty().ifEmpty { "Unspecified location"}
+    println("\nBriefly describe the fault:")
+    print("> ")
+    val description = readLine()?.trim().orEmpty().ifEmpty { "No description provided"}
+
+    val newReport = Report(
+        id = nextId,
+        faultType = faultType,
+        location = Location,
+        severityCode = 'M',
+        isResolved = false,
+    )
+    reports.add(newReport)
+    nextId++
+    println("\nReport submitted successfully. ID: ${newReport.id}")
+    println("Description: $description")
+}
+
+
+    fun printHeader(title: String) {
+        println("=".repeat (40))
+        println(title)
+        println("=".repeat (n=40))
+
+    }
+    fun printReport(report: Report){
+        println("---------------------")
+        println("Report ID: ${report.id}")
+        println("Fault Type: ${report.faultType}")
+        println("location: ${report.location}")
+        println("status: ${if (report.isResolved) "Resolved" else "Not Resolved"}")
+        println("------------------------")
+    }
+
 fun printMenu() {
     println("----------------------------------------")
     println("MAIN MENU")
@@ -133,7 +155,6 @@ fun printMenu() {
     println("5. Exit")
     println("----------------------------------------")
 }
-
 
 fun viewAllReports() {
     printHeader("ALL REPORTED FAULTS")
@@ -180,5 +201,4 @@ fun updateReportStatus() {
 
     report.isResolved = true
     println("Report ${report.id} marked as Resolved.")
-}
 }
