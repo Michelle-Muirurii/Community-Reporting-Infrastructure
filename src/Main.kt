@@ -133,3 +133,52 @@ fun printMenu() {
     println("5. Exit")
     println("----------------------------------------")
 }
+
+
+fun viewAllReports() {
+    printHeader("ALL REPORTED FAULTS")
+    if (reports.isEmpty()) {
+        println("No reports submitted yet.\n")
+        return
+    }
+    for (report in reports) {
+        printReport(report)
+    }
+}
+
+fun viewReportsByStatus() {
+    printHeader("VIEW REPORTS BY STATUS")
+    println("1. Pending   2. Resolved")
+    print("> ")
+    val choice = readLine()?.toIntOrNull()
+
+    val filtered = when (choice) {
+        1 -> reports.filter { !it.isResolved }
+        2 -> reports.filter { it.isResolved }
+        else -> emptyList()
+    }
+
+    if (filtered.isEmpty()) {
+        println("No matching reports.\n")
+    } else {
+        for (report in filtered) {
+            printReport(report)
+        }
+    }
+}
+
+fun updateReportStatus() {
+    printHeader("UPDATE REPORT STATUS")
+    print("Enter Report ID: ")
+    val id = readLine()?.toIntOrNull()
+
+    val report = reports.find { it.id == id }
+    if (report == null) {
+        println("No report found with that ID.\n")
+        return
+    }
+
+    report.isResolved = true
+    println("Report ${report.id} marked as Resolved.")
+}
+}
